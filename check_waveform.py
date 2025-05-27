@@ -8,12 +8,12 @@ from dash.exceptions import PreventUpdate
 
 
 # Load waveform and spike data
-with open("waveform.json", "r") as f:
+with open("output/waveform.json", "r") as f:
     waveform_data = json.load(f)
     y_ds = np.array(waveform_data["waveform"])
     time_ds = np.array(waveform_data["time"])
 
-with open("assets/spikes.json", "r") as f:
+with open("output/spikes.json", "r") as f:
     spike_times = np.array(json.load(f)["spike_times"])
 
 # Collapse spikes within 2 seconds of each other and keep the earliest in each group
@@ -32,8 +32,7 @@ def collapse_spikes(spike_times, window=2.0):
 
 # Use the collapsed spike times
 collapsed_spike_times = collapse_spikes(spike_times, window=2.0)
-print(len(collapsed_spike_times))
-print(collapsed_spike_times)
+# print(len(collapsed_spike_times))
 
 # Dash app
 app = dash.Dash(__name__)
@@ -44,7 +43,7 @@ app.layout = html.Div([
     
     html.Video(
         controls=True,
-        src="videos/VID_20250517_184414279.mp4",
+        src="assets/VID_20250517_184414279.mp4",
         style={"width": "80%", "display": "block", "margin": "auto"}
     ),
     dcc.Store(id='click-store', data={'last_click': None}),

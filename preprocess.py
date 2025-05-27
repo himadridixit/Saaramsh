@@ -10,7 +10,7 @@ AUDIO_PATH = "output/audio.wav"
 WAVEFORM_JSON = "output/waveform.json"
 SPIKES_JSON = "output/spikes.json"
 DOWNSAMPLE_POINTS = 200000  # for display
-THRESHOLD = 0.5
+THRESHOLD = 0.6
 
 # Create output directory if it doesn't exist
 os.makedirs("output", exist_ok=True)

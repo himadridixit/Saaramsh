@@ -7,6 +7,8 @@ reels/
 # Temporary generated files
 output/
 
+mini_clips/
+
 # Python
 __pycache__/
 *.py[cod]
