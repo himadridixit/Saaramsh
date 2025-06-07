@@ -8,8 +8,8 @@ VIDEO_FILE = "assets/VID_20250517_184414279.mp4"
 OUTPUT_DIR = "mini_clips"
 TEMP_CLIPS_DIR = os.path.join(OUTPUT_DIR, "temp")
 OUTPUT_REEL = os.path.join(OUTPUT_DIR, "highlight_reel_ffmpeg_mini.mp4")
-PRE_TIME = 0.1
-POST_TIME = 0.5
+PRE_TIME = 0.01
+POST_TIME = 0.45
 
 # Collapse spikes
 def collapse_spikes(spike_times, window=2.0):
@@ -28,6 +28,9 @@ with open("output/spikes.json", "r") as f:
 
 collapsed_spikes = collapse_spikes(spike_times)
 
+with open("output/collapsed_spikes.json", "w") as f:
+    json.dump({"collapsed_spikes": collapsed_spikes.tolist()}, f)
+breakpoint()
 # Prepare directories
 os.makedirs(TEMP_CLIPS_DIR, exist_ok=True)
 

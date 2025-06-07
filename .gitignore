@@ -8,6 +8,9 @@ reels/
 output/
 
 mini_clips/
+dataset/
+
+rough.py
 
 # Python
 __pycache__/

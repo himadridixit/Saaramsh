@@ -12,7 +12,6 @@ from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import scipy.signal
 
-## 44, 45, 46
 
 def high_pass_filter(y, sr, cutoff=300):
     b, a = scipy.signal.butter(4, cutoff / (0.5 * sr), btype='high')
@@ -44,19 +43,35 @@ def match_spectrogram(template_dB, full_dB, threshold=0.7):
     match_locations = np.where(result >= threshold)
     return sorted(set(match_locations[1]))  # x-axis = time
 
+def collapse_matches(times, min_gap=2.0):
+    times = np.sort(times)
+    collapsed = [times[0]]
+    for t in times[1:]:
+        if t - collapsed[-1] > min_gap:
+            collapsed.append(t)
+    return collapsed
+
 # Load audio and match
 sr = 44100
 hop = 256
-print("1")
+
 template_audio = load_audio("output/template.wav", sr)
 full_audio = load_audio("output/audio.wav", sr)
 print("loaded audio")
+
 template_dB = audio_to_mel_spectrogram(template_audio, sr, hop)
+n_template_frames = template_dB.shape[1]
+template_duration = (n_template_frames * hop) / sr
+print("frames in template ", n_template_frames)
+print("template_duration ",template_duration)
+print(template_dB.shape)
 full_dB = audio_to_mel_spectrogram(full_audio, sr, hop)
+np.save("output/full_spectrogram.npy", full_dB)
 print("converted to mel spectrogram")
-matches_x = match_spectrogram(template_dB, full_dB, threshold=0.9)
+
+matches_x = match_spectrogram(template_dB, full_dB, threshold=0.83)
 match_times = [x * hop / sr for x in matches_x]
-rounded_matches = sorted(set(np.round(match_times, 1)))
+rounded_matches = collapse_matches(match_times)
 with open("output/match_times.json", "w") as f:
     json.dump({"match_times": match_times}, f)
 print("matching done")  
